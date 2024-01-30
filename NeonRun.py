@@ -3,44 +3,41 @@ from pygame.locals import *
 
 pygame.init()
 
-fenetre = pygame.display.set_mode((1920, 1080), FULLSCREEN)
+screen_width = 1920
+screen_height = 1080
+
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption('Neon Run')
 
 #background
 fond = pygame.image.load("NRR background1.png").convert()
-fenetre.blit(fond, (0,0))
+screen.blit(fond, (0,0))
 
 #character
-perso = pygame.image.load("NRR still test.png").convert_alpha()
-DEFAULT_IMAGE_SIZE = (192,192)
-perso = pygame.transform.scale(perso, DEFAULT_IMAGE_SIZE)
-position_perso = perso.get_rect()
-fenetre.blit(perso, position_perso)
+class Player():
+    def __init__(self, x, y):
+        perso = pygame.image.load("NRR still test.png").convert_alpha()
+        self.personnage = pygame.transform.scale(perso, (192, 192))
+        self.rect = self.personnage.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def update(self):
+        screen.blit(self.personnage, self.rect)
 
 pygame.display.flip()
 
-y_gravity = 1
-jump_height = 20
-y_velocity = jump_height
+player = Player(100, screen_height - 335)
 
-continuer = 1
+run = 1
 pygame.key.set_repeat(10,10)
-while continuer:
+while run:
+
+    player.update()
+
     for event in pygame.event.get():
         if event.type == KEYDOWN and event.key == K_ESCAPE:
-            continuer = 0
-        if event.type == KEYDOWN:
-            if event.key == K_RIGHT:
-                position_perso = position_perso.move(5,0)
-            if event.key == K_LEFT:
-                position_perso = position_perso.move(-5,0)
-            if event.key == K_UP:
-                position_perso = position_perso.move(0,-5)
-            if event.key == K_DOWN:
-                position_perso = position_perso.move(0,5)
-                
-                
-    fenetre.blit(fond, (0,0))
-    fenetre.blit(perso, position_perso)
+            run = 0
 
-    pygame.display.flip()
+    pygame.display.update()
 
