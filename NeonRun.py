@@ -19,8 +19,8 @@ class Player():
         perso = pygame.image.load("NRR still test.png").convert_alpha()
         self.personnage = pygame.transform.scale(perso, (192, 192))
         self.rect = self.personnage.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = self.velocity_x
+        self.rect.y = self.velocity_y
 
     def update(self):
         screen.blit(self.personnage, self.rect)
@@ -38,20 +38,20 @@ while run:
     for event in pygame.event.get():
         if event.type == KEYDOWN and event.key == K_ESCAPE:
             run = 0
-         elif event.type == pygame.KEYDOWN:
+        elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    ball.velocity_x = -3
+                    player.velocity_x = -3
                 elif event.key == pygame.K_RIGHT:
-                    ball.velocity_x = 3
+                    player.velocity_x = 3
                 elif event.key == pygame.K_UP:
-                    ball.velocity_y = -3
+                    player.velocity_y = -3
                 elif event.key == pygame.K_DOWN:
-                    ball.velocity_y = 3
-            elif event.type == pygame.KEYUP:
+                    player.velocity_y = 3
+        elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                    ball.velocity_x = 0
+                    player.velocity_x = 0
                 elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                    ball.velocity_x = 0
+                    player.velocity_x = 0
 
     pygame.display.update()
     
