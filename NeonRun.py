@@ -17,13 +17,29 @@ screen.blit(fond, (0,0))
 class Player():
     def __init__(self, x, y):
         perso = pygame.image.load("NRR still test.png").convert_alpha()
-        self.personnage = pygame.transform.scale(perso, (192, 192))
-        self.rect = self.personnage.get_rect()
-        self.rect.x = self.velocity_x
-        self.rect.y = self.velocity_y
+        self.image = pygame.transform.scale(perso, (192, 192))
+        self.rect = self.image.get_rect()
+        self.velocity_x = 0
+        self.velocity_y = 0
+    
+    def move(self):
+        if player.velocity_y > 0:
+            if player.rect.bottom + player.velocity_y > screen_height:
+                player.velocity_y = 0
+        if player.velocity_y < 0:
+            if player.rect.top + player.velocity_y <= 0:
+                player.velocity_y = 0
+        if player.velocity_x > 0:
+            if player.rect.right + player.velocity_x > screen_width:
+                player.velocity_x = 0
+        if player.velocity_x + player.velocity_x < 0:
+            if player.rect.left <= 0:
+                player.velocity_x = 0
+        self.rect.x += self.velocity_x
+        self.rect.y += self.velocity_y
 
     def update(self):
-        screen.blit(self.personnage, self.rect)
+        screen.blit(self.image, self.rect)
 
 pygame.display.flip()
 
