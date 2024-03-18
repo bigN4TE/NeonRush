@@ -38,6 +38,20 @@ while run:
     for event in pygame.event.get():
         if event.type == KEYDOWN and event.key == K_ESCAPE:
             run = 0
+         elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    ball.velocity_x = -3
+                elif event.key == pygame.K_RIGHT:
+                    ball.velocity_x = 3
+                elif event.key == pygame.K_UP:
+                    ball.velocity_y = -3
+                elif event.key == pygame.K_DOWN:
+                    ball.velocity_y = 3
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    ball.velocity_x = 0
+                elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    ball.velocity_x = 0
 
-    pygame.display.update()
+    pygame.display.update() 
 
