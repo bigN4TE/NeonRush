@@ -53,5 +53,5 @@ while run:
                 elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     ball.velocity_x = 0
 
-    pygame.display.update() 
-
+    pygame.display.update()
+    
