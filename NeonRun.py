@@ -98,8 +98,8 @@ class Player():
         self.image_jump_left = []
         self.index = 0
         self.counter = 0
-        for num in range(2, 10):
-            img_right = pygame.image.load(f"Walk R {num}.png")
+        for num in range(1, 9):
+            img_right = pygame.image.load(f'Character/Walk {num}.png')
             img_right = pygame.transform.scale(img_right, (128, 128))
             img_left = pygame.transform.flip(img_right, True, False)
             self.image_right.append(img_right)
