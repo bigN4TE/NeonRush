@@ -14,7 +14,7 @@ tile_size = 128
 img_size = (128, 128)
 
 #background
-fond = pygame.image.load("background proto.png")
+fond = pygame.image.load('Assets/Backgrounds/Background 1.png')
 
 #tile grid
 def draw_grid():
@@ -28,12 +28,13 @@ class World():
         self.tile_list = []
 
         #tile assets
-        stage_img1 = pygame.image.load("Floor 1.png")
-        stage_img2 = pygame.image.load("Floor 2.png")
-        frame_img = pygame.image.load("Floor 3.png")
-        speaker_img = pygame.image.load("Speaker.png")
-        drum_img = pygame.image.load("Drum.png")
-        cymbals_img = pygame.image.load("Cymbals 1.png")
+        stage_img1 = pygame.image.load('Assets/Tiles/Floor 1.png')
+        stage_img2 = pygame.image.load('Assets/Tiles/Floor 2.png')
+        frame_img = pygame.image.load('Assets/Tiles/Floor 3.png')
+        speaker_img = pygame.image.load('Assets/Tiles/Speaker.png')
+        piano_img = pygame.image.load('Assets/Tiles/Piano.png')
+        drum_img = pygame.image.load('Assets/Items/Drum.png')
+        cymbals_img = pygame.image.load('Assets/Items/Cymbals 1.png')
 
         #tile value
         row_count = 0
@@ -63,6 +64,13 @@ class World():
                     self.tile_list.append(tile)
                 if tile == 4:
                     img = pygame.transform.scale(speaker_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                if tile == 5:
+                    img = pygame.transform.scale(piano_img, (tile_size, tile_size))
                     img_rect = img.get_rect()
                     img_rect.x = col_count * tile_size
                     img_rect.y = row_count * tile_size
@@ -99,7 +107,7 @@ class Player():
         self.index = 0
         self.counter = 0
         for num in range(1, 9):
-            img_right = pygame.image.load(f'Character/Walk {num}.png')
+            img_right = pygame.image.load(f'Assets/Character/Walk {num}.png')
             img_right = pygame.transform.scale(img_right, (128, 128))
             img_left = pygame.transform.flip(img_right, True, False)
             self.image_right.append(img_right)
