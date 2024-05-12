@@ -11,6 +11,7 @@ pygame.display.set_caption('Neon Run')
 
 #tile size
 tile_size = 128
+img_size = (128, 128)
 
 #background
 fond = pygame.image.load("background proto.png")
@@ -99,7 +100,7 @@ class Player():
         self.counter = 0
         for num in range(2, 10):
             img_right = pygame.image.load(f"Walk R {num}.png")
-            img_right = pygame.transform.scale(img_right, (192, 192))
+            img_right = pygame.transform.scale(img_right, (128, 128))
             img_left = pygame.transform.flip(img_right, True, False)
             self.image_right.append(img_right)
             self.image_left.append(img_left)
@@ -195,6 +196,7 @@ class Player():
             dy = 0
 
         screen.blit(self.image, self.rect)
+        pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)
 
 pygame.display.flip()
 
