@@ -4,6 +4,9 @@ import time
 
 pygame.init()
 
+clock = pygame.time.Clock()
+fps = 60
+
 screen_width = 1920
 screen_height = 1080
 
@@ -110,6 +113,17 @@ class World():
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
+                if tile == 6:
+                    img = pygame.transform.scale(drum_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                if tile == 7:
+                    Pig1 = Enemy(col_count * tile, row_count * tile_size)
+                    Pig_group.add(Pig1)
+
                 col_count += 1
             row_count += 1
 
@@ -240,6 +254,25 @@ class Player():
         screen.blit(self.image, self.rect)
         pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)
 
+#Enemy1
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('Assets/Pig1/Pig1 Still 1.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.move_direction = 1
+        self.move_counter = 0
+
+    def update(self):
+        self.rect.x += self.move_direction
+        self.move_counter += 1
+        if abs(self.move_counter) > 128:
+            self.move_direction *= -1
+            self.move_counter *= -1
+
+
 pygame.display.flip()
 
 #jump pad
@@ -251,6 +284,8 @@ world = World(world_data)
 run = True
 pygame.key.set_repeat(10,10)
 while run:
+
+    clock.tick(fps)
 
     screen.blit(background, (0, 0))
 
