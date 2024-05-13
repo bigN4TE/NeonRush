@@ -17,6 +17,8 @@ pygame.display.set_caption('Neon Run')
 tile_size = 128
 img_size = (128, 128)
 
+game_over = 0
+
 #background
 background = pygame.image.load('Assets/Backgrounds/Background 0.png')
 
@@ -51,8 +53,6 @@ class AnimatedBackground(pygame.sprite.Sprite):
         self.animate()
         self.my_background = AnimatedBackground(0, 0, [bg_image1, bg_image2, bg_image3, bg_image4, bg_image1], frame_delta = 3000)"""
 
-
-
 #tile grid
 def draw_grid():
     for line in range(0, 25):
@@ -82,7 +82,8 @@ class Player():
             img_jumpl = pygame.transform.flip(img_right, True, False)
             self.image_jump_right.append(img_jumpr)
             self.image_jump_left.append(img_jumpl)
-        self.image = self.image_jump_right[self.index]"""
+        self.image = self.image_jump_right[self.index]
+        self.dead_image = pygame.image.load('Assets/Character/.png')"""
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -92,85 +93,97 @@ class Player():
         self.jumped = False
         self.direction = 0
 
-    def update(self):
+    def update(self, game_over):
         dx = 0
         dy = 0
         walk_cooldown = 1.5
 
-    #controles
-        key = pygame.key.get_pressed()
-        if key[pygame.K_UP] and self.jumped == False:
-            self.vel_y = -20
-            self.jumped = True
-        if key[pygame.K_UP] == False:
-            self.jumped = False
-        if key[pygame.K_LEFT]:
-            dx -= 20
-            self.counter += 1
-            self.direction = -1
-        if key[pygame.K_RIGHT]:
-            dx += 20
-            self.counter += 1
-            self.direction = 1
+        if game_over == 0:
 
-        """if""" 
-        if key[pygame.K_LEFT] == False and key[pygame.K_RIGHT] == False:
-            self.counter = 0
-            self.direction = 0
-            if self.direction == 1:
-                self.image = self.image_right[self.index]
-            if self.direction == -1:
-                self.image = self.image_left[self.index]
-        """elif 
+    #controles
+            key = pygame.key.get_pressed()
+            if key[pygame.K_UP] and self.jumped == False:
+                self.vel_y = -20
+                self.jumped = True
             if key[pygame.K_UP] == False:
+                self.jumped = False
+            if key[pygame.K_LEFT]:
+                dx -= 20
+                self.counter += 1
+                self.direction = -1
+            if key[pygame.K_RIGHT]:
+                dx += 20
+                self.counter += 1
+                self.direction = 1
+
+            """if""" 
+            if key[pygame.K_LEFT] == False and key[pygame.K_RIGHT] == False:
                 self.counter = 0
                 self.direction = 0
-                if self.vel_y == 1:
+                if self.direction == 1:
                     self.image = self.image_right[self.index]
-                if self.vel_y == -1:
-                    self.image = self.image_left[self.index]"""
+                if self.direction == -1:
+                    self.image = self.image_left[self.index]
+            """elif 
+                if key[pygame.K_UP] == False:
+                    self.counter = 0
+                    self.direction = 0
+                    if self.vel_y == 1:
+                        self.image = self.image_right[self.index]
+                    if self.vel_y == -1:
+                        self.image = self.image_left[self.index]"""
 
-        if self.counter > walk_cooldown:
-            self.counter = 0
-            self.index += 1
-            if self.index >= len(self.image_right):
-                self.index = 0
-            if self.direction == 1:
-                self.image = self.image_right[self.index]
-            if self.direction == -1:
-                self.image = self.image_left[self.index]
-        
-        #gravity
-        self.vel_y += 1
-        if self.vel_y > 10:
-            self.vel_y = 12
-        dy += self.vel_y
+            if self.counter > walk_cooldown:
+                self.counter = 0
+                self.index += 1
+                if self.index >= len(self.image_right):
+                    self.index = 0
+                if self.direction == 1:
+                    self.image = self.image_right[self.index]
+                if self.direction == -1:
+                    self.image = self.image_left[self.index]
+            
+            #gravity
+            self.vel_y += 1
+            if self.vel_y > 10:
+                self.vel_y = 12
+            dy += self.vel_y
 
-        #collision
-        for tile in world.tile_list:
-            if tile[1].colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
-                dx = 0
-            if tile[1].colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
-                if self.vel_y < 0:
-                    dy = tile[1].bottom - self.rect.top
-                    self.vel_y = 0
-                elif self.vel_y >= 0:
-                    dy = tile[1].top - self.rect.bottom
-                    self.vel_y = 0
+            #collision
+            for tile in world.tile_list:
+                if tile[1].colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
+                    dx = 0
+                if tile[1].colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
+                    if self.vel_y < 0:
+                        dy = tile[1].bottom - self.rect.top
+                        self.vel_y = 0
+                    elif self.vel_y >= 0:
+                        dy = tile[1].top - self.rect.bottom
+                        self.vel_y = 0
 
-        #coordinates update
-        self.rect.x += dx
-        self.rect.y += dy
+            if pygame.sprite.spritecollide(self, pig_group, False):
+                game_over = -1
+            
+            """if pygame.sprite.spritecollide(self, cable_group, False):
+                game_over = -1"""
+            
+            #coordinates update
+            self.rect.x += dx
+            self.rect.y += dy
 
-        if self.rect.bottom > screen_height:
-            self.rect.bottom = screen_height
-            dy = 0
+        elif game_over == -1:
+            """self.image = self.dead_image"""
+            
+            if self.rect.y > 200:
+                self.rect.y -= 5
 
         screen.blit(self.image, self.rect)
         pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)
 
+        return game_over
+
 #Enemy1
-class Enemy(pygame.sprite.Sprite):
+class Enemy1(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('Assets/Pig1/Pig1 Still 1.png')
@@ -187,6 +200,16 @@ class Enemy(pygame.sprite.Sprite):
             self.move_direction *= -1
             self.move_counter *= -1
 
+#Cables
+"""class Cables(pygame.sprit.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        img = pygame.image.load('Assets/Tiles/.png')
+        self.image = pygame.transform.scale(img, (tile_size, tile_size // 2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y"""
+
 #jump pad
 
 #tile system
@@ -201,8 +224,7 @@ class World():
         speaker_img = pygame.image.load('Assets/Tiles/Speaker.png')
         piano_img = pygame.image.load('Assets/Tiles/Piano.png')
         drum_img = pygame.image.load('Assets/Items/Drum.png')
-        cymbals_img = pygame.image.load('Assets/Items/Cymbals 1.png')
-
+        
         #tile value
         row_count = 0
         for row in data:
@@ -250,10 +272,12 @@ class World():
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
-                if tile == 7:
-                    Pig1 = Enemy(col_count * tile, row_count * tile_size)
-                    Pig_group.add(Pig1)
-
+                """if tile == 7:
+                    cables = Cables(col_count * tile_size, row_count * tile_size + (tile_size // 2))
+                    cables_group.add(cables)"""
+                if tile == 8:
+                    pig1 = Enemy1(col_count * tile, row_count * tile_size)
+                    pig_group.add(pig1)
                 col_count += 1
             row_count += 1
 
@@ -278,6 +302,8 @@ pygame.display.flip()
 
 #Loop
 player = Player(100, screen_height - 335)
+pig_group = pygame.sprite.Group()
+"""Cable_group = pygame.sprite.Groupe()"""
 world = World(world_data)
 
 run = True
@@ -292,7 +318,13 @@ while run:
 
     draw_grid()
 
-    player.update()
+    if game_over == 0:
+        pig_group.update()
+    
+    pig_group.draw(screen)
+    """cables_group.draw(screen)"""
+
+    game_over = player.update(game_over)
 
     for event in pygame.event.get():
         if event.type == KEYDOWN and event.key == K_ESCAPE:
