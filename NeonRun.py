@@ -14,7 +14,7 @@ tile_size = 128
 img_size = (128, 128)
 
 #background
-fond = pygame.image.load('Assets/Backgrounds/Background 1.png')
+pygame.image.load('Assets/Backgrounds/Background 1.png')
 
 #tile grid
 def draw_grid():
@@ -218,7 +218,7 @@ run = True
 pygame.key.set_repeat(10,10)
 while run:
 
-    screen.blit(fond, (0,0))
+    screen.blit(fond_img[i], (0, 0))
 
     world.draw()
 
