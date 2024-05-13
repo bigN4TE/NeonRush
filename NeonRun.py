@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+import time
 
 pygame.init()
 
@@ -14,7 +15,40 @@ tile_size = 128
 img_size = (128, 128)
 
 #background
-pygame.image.load('Assets/Backgrounds/Background 1.png')
+background = pygame.image.load('Assets/Backgrounds/Background 0.png')
+
+"""bg_image1 = 'Assets/Backgrounds/Background 0.png'
+bg_image2 = 'Assets/Backgrounds/Background 1.png'
+bg_image3 = 'Assets/Backgrounds/Background 2.png'
+bg_image4 = 'Assets/Backgrounds/Background 3.png'
+bg_image5 = 'Assets/Backgrounds/Background 4.png'
+
+class AnimatedBackground(pygame.sprite.Sprite):
+    def __init__(self, x, y, animations, frame_delta=3000):
+        pygame.sprite.Sprite.__init__(self)
+        self.animation_frames = [pygame.image.load(f'Assets/Backgrounds/Background 0.png').convert_alpha() for filename in animations]
+        self.image = self.animation_frames[0]
+
+        self.rect = self.image.get_rect()        
+        self.rect.x = x
+        self.rect.y = y
+
+        self.current_frame = 0
+        self.last_update = 0
+        self.frame_delta = frame_delta
+
+    def animate(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_update > self.frame_delta:
+            self.last_update = now
+            self.current_frame = (self.current_frame + 1) % len(self.animation_frames)
+            self.image = self.animation_frames[self.current_frame]
+    
+    def update(self):
+        self.animate()
+        self.my_background = AnimatedBackground(0, 0, [bg_image1, bg_image2, bg_image3, bg_image4, bg_image1], frame_delta = 3000)"""
+
+
 
 #tile grid
 def draw_grid():
@@ -218,7 +252,7 @@ run = True
 pygame.key.set_repeat(10,10)
 while run:
 
-    screen.blit(fond_img[i], (0, 0))
+    screen.blit(background, (0, 0))
 
     world.draw()
 
