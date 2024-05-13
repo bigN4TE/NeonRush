@@ -59,91 +59,6 @@ def draw_grid():
         pygame.draw.line(screen, (255, 255, 255), (0, line * tile_size), (screen_width, line * tile_size))
         pygame.draw.line(screen, (255, 255, 255), (line * tile_size, 0), (line * tile_size, screen_height))
 
-#tile system
-class World():
-    def __init__(self, data):
-        self.tile_list = []
-
-        #tile assets
-        stage_img1 = pygame.image.load('Assets/Tiles/Floor 1.png')
-        stage_img2 = pygame.image.load('Assets/Tiles/Floor 2.png')
-        frame_img = pygame.image.load('Assets/Tiles/Floor 3.png')
-        speaker_img = pygame.image.load('Assets/Tiles/Speaker.png')
-        piano_img = pygame.image.load('Assets/Tiles/Piano.png')
-        drum_img = pygame.image.load('Assets/Items/Drum.png')
-        cymbals_img = pygame.image.load('Assets/Items/Cymbals 1.png')
-
-        #tile value
-        row_count = 0
-        for row in data:
-            col_count = 0
-            for tile in row:
-                if tile == 1:
-                    img = pygame.transform.scale(stage_img1, (tile_size, tile_size))
-                    img_rect = img.get_rect()
-                    img_rect.x = col_count * tile_size
-                    img_rect.y = row_count * tile_size
-                    tile = (img, img_rect)
-                    self.tile_list.append(tile)
-                if tile == 2:
-                    img = pygame.transform.scale(stage_img2, (tile_size, tile_size))
-                    img_rect = img.get_rect()
-                    img_rect.x = col_count * tile_size
-                    img_rect.y = row_count * tile_size
-                    tile = (img, img_rect)
-                    self.tile_list.append(tile)
-                if tile == 3:
-                    img = pygame.transform.scale(frame_img, (tile_size, tile_size))
-                    img_rect = img.get_rect()
-                    img_rect.x = col_count * tile_size
-                    img_rect.y = row_count * tile_size
-                    tile = (img, img_rect)
-                    self.tile_list.append(tile)
-                if tile == 4:
-                    img = pygame.transform.scale(speaker_img, (tile_size, tile_size))
-                    img_rect = img.get_rect()
-                    img_rect.x = col_count * tile_size
-                    img_rect.y = row_count * tile_size
-                    tile = (img, img_rect)
-                    self.tile_list.append(tile)
-                if tile == 5:
-                    img = pygame.transform.scale(piano_img, (tile_size, tile_size))
-                    img_rect = img.get_rect()
-                    img_rect.x = col_count * tile_size
-                    img_rect.y = row_count * tile_size
-                    tile = (img, img_rect)
-                    self.tile_list.append(tile)
-                if tile == 6:
-                    img = pygame.transform.scale(drum_img, (tile_size, tile_size))
-                    img_rect = img.get_rect()
-                    img_rect.x = col_count * tile_size
-                    img_rect.y = row_count * tile_size
-                    tile = (img, img_rect)
-                    self.tile_list.append(tile)
-                if tile == 7:
-                    Pig1 = Enemy(col_count * tile, row_count * tile_size)
-                    Pig_group.add(Pig1)
-
-                col_count += 1
-            row_count += 1
-
-    def draw(self):
-        for tile in self.tile_list:
-            screen.blit(tile[0], tile[1])
-
-#tile placement
-world_data = [
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
-]
-
 #character
 class Player():
     def __init__(self, x, y):
@@ -272,10 +187,94 @@ class Enemy(pygame.sprite.Sprite):
             self.move_direction *= -1
             self.move_counter *= -1
 
+#jump pad
+
+#tile system
+class World():
+    def __init__(self, data):
+        self.tile_list = []
+
+        #tile assets
+        stage_img1 = pygame.image.load('Assets/Tiles/Floor 1.png')
+        stage_img2 = pygame.image.load('Assets/Tiles/Floor 2.png')
+        frame_img = pygame.image.load('Assets/Tiles/Floor 3.png')
+        speaker_img = pygame.image.load('Assets/Tiles/Speaker.png')
+        piano_img = pygame.image.load('Assets/Tiles/Piano.png')
+        drum_img = pygame.image.load('Assets/Items/Drum.png')
+        cymbals_img = pygame.image.load('Assets/Items/Cymbals 1.png')
+
+        #tile value
+        row_count = 0
+        for row in data:
+            col_count = 0
+            for tile in row:
+                if tile == 1:
+                    img = pygame.transform.scale(stage_img1, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                if tile == 2:
+                    img = pygame.transform.scale(stage_img2, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                if tile == 3:
+                    img = pygame.transform.scale(frame_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                if tile == 4:
+                    img = pygame.transform.scale(speaker_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                if tile == 5:
+                    img = pygame.transform.scale(piano_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                if tile == 6:
+                    img = pygame.transform.scale(drum_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                if tile == 7:
+                    Pig1 = Enemy(col_count * tile, row_count * tile_size)
+                    Pig_group.add(Pig1)
+
+                col_count += 1
+            row_count += 1
+
+    def draw(self):
+        for tile in self.tile_list:
+            screen.blit(tile[0], tile[1])
+
+#tile placement
+world_data = [
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+]
 
 pygame.display.flip()
-
-#jump pad
 
 #Loop
 player = Player(100, screen_height - 335)
