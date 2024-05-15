@@ -180,7 +180,7 @@ class Player():
         elif game_over == -1:
             self.image = self.dead_image
             
-            if self.rect.y > 200:
+            if self.rect.y > -100:
                 self.rect.y -= 5
 
         screen.blit(self.image, self.rect)
@@ -225,6 +225,24 @@ class Enemy1(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('Assets/Pig1/Pig1 Still 1.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.move_direction = 1
+        self.move_counter = 0
+
+    def update(self):
+        self.rect.x += self.move_direction
+        self.move_counter += 1
+        if abs(self.move_counter) > 128:
+            self.move_direction *= -1
+            self.move_counter *= -1
+
+#Enemy2
+class Enemy2(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('Assets/Pig2/Pig2 Still 1.png')
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -316,6 +334,9 @@ class World():
                 if tile == 8:
                     pig1 = Enemy1(col_count * tile, row_count * tile_size)
                     pig_group.add(pig1)
+                if tile == 9:
+                    pig2 = Enemy2(col_count * tile, row_count * tile_size)
+                    pig_group.add(pig2)
                 col_count += 1
             row_count += 1
 
@@ -327,7 +348,7 @@ class World():
 world_data = [
 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8],
 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
