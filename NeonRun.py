@@ -22,7 +22,7 @@ game_over = 0
 main_menu = True
 
 #background
-background = pygame.image.load('Assets/Backgrounds/Background 0.png')
+background = pygame.image.load('Assets/Backgrounds/Background 1.png')
 
 #restart
 gameover_menu = pygame.image.load('Assets/Menus/Game Over.png')
@@ -178,7 +178,7 @@ class Player():
             self.rect.y += dy
 
         elif game_over == -1:
-            """self.image = self.dead_image"""
+            self.image = self.dead_image
             
             if self.rect.y > 200:
                 self.rect.y -= 5
@@ -208,8 +208,8 @@ class Player():
             img_jumpl = pygame.transform.flip(img_right, True, False)
             self.image_jump_right.append(img_jumpr)
             self.image_jump_left.append(img_jumpl)
-        self.image = self.image_jump_right[self.index]
-        self.dead_image = pygame.image.load('Assets/Character/.png')"""
+        self.image = self.image_jump_right[self.index]"""
+        self.dead_image = pygame.image.load('Assets/Character/Death.png')
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
