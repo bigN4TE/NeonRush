@@ -146,7 +146,9 @@ class Player():
                     self.image = self.image_right[self.index]
                 if self.direction == -1:
                     self.image = self.image_left[self.index]
-            
+                """if self.direction == 0:
+                    self.image = self.image_front[self.index]"""
+
             #gravity
             self.vel_y += 1
             if self.vel_y > 10:
@@ -193,6 +195,7 @@ class Player():
         self.image_left = []
         self.image_jump_right = []
         self.image_jump_left = []
+        self.image_front = []
         self.index = 0
         self.counter = 0
         for num in range(1, 9):
@@ -202,8 +205,13 @@ class Player():
             self.image_right.append(img_right)
             self.image_left.append(img_left)
         self.image = self.image_right[self.index]
+        """for num in range(1, 6):
+            img_front = pygame.image.load(f'Assets/Character/Still {num}.png')
+            img_front = pygame.transform.scale(img_front, (128, 128))
+            self.image_front.append(img_front)
+        self.image = self.image_front[self.index] """
         """for num in range (1, 10):
-            img_jumpr = pygame.image.load(f"Jump R {num}.png")
+            img_jumpr = pygame.image.load(f"Assets/Character/Jump {num}.png")
             img_jumpr = pygame.transform.scale(img_right, (192, 192))
             img_jumpl = pygame.transform.flip(img_right, True, False)
             self.image_jump_right.append(img_jumpr)
