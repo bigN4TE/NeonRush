@@ -25,11 +25,14 @@ main_menu = True
 background = pygame.image.load('Assets/Backgrounds/Background 0.png')
 
 #restart
-"""restart = pygame.image.load('Assets/Buttons/.png')"""
+gameover_menu = pygame.image.load('Assets/Menus/Game Over.png')
+restart = pygame.image.load('Assets/Buttons/Retry.png')
+restart = pygame.transform.scale(restart, (384, 192))
 
 #main menu
 start = pygame.image.load('Assets/Menus/Start Menu.png')
 play = pygame.image.load('Assets/Buttons/Play.png')
+play = pygame.transform.scale(play, (384, 192))
 
 """bg_image1 = 'Assets/Backgrounds/Background 0.png'
 bg_image2 = 'Assets/Backgrounds/Background 1.png'
@@ -340,9 +343,8 @@ player = Player(100, screen_height - 335)
 pig_group = pygame.sprite.Group()
 """Cable_group = pygame.sprite.Groupe()"""
 world = World(world_data)
-"""restart_button = Button(screen_width // 2 - 128, screen_height // 2 + 256, restart_img)"""
-play_button = Button(screen_width // 2 - 920 , screen_height // 2 - 500 , play)
-"""quit_button = """
+restart_button = Button(screen_width // 2 - 175, screen_height // 2 + 250, restart)
+play_button = Button(screen_width // 2 - 200, screen_height // 2 + 100 , play)
 
 run = True
 pygame.key.set_repeat(10,10)
@@ -355,8 +357,6 @@ while run:
         screen.blit(start, (0, 0))
         if play_button.draw():
             main_menu = False
-        """if quit_button.draw():
-            run = False"""
     else:
         world.draw()
 
@@ -371,10 +371,11 @@ while run:
         game_over = player.update(game_over)
 
         #if player dead
-        """if game_over == -1:
+        if game_over == -1:
+            screen.blit(gameover_menu, (0, 0))
             if restart_button.draw():
-                player.reset()
-                game_over = 0"""
+                player.reset(100, screen_height - 335)
+                game_over = 0
 
     for event in pygame.event.get():
         if event.type == KEYDOWN and event.key == K_ESCAPE:
