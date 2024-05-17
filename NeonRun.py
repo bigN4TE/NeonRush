@@ -398,6 +398,7 @@ pygame.display.flip()
 player = Player(100, screen_height - 335)
 pig_group = pygame.sprite.Group()
 cables_group = pygame.sprite.Group()
+exit_group = pygame.sprite.Group()
 world = World(world_data)
 restart_button = Button(screen_width // 2 - 175, screen_height // 2 + 250, restart)
 play_button = Button(screen_width // 2 - 200, screen_height // 2 + 100 , play)
@@ -428,6 +429,7 @@ while run:
     
         pig_group.draw(screen)
         cables_group.draw(screen)
+        exit_group.draw(screen)
 
         game_over = player.update(game_over)
 
@@ -437,6 +439,19 @@ while run:
             if restart_button.draw():
                 player.reset(100, screen_height - 335)
                 game_over = 0
+
+        if game_over == 1:
+            level += 1
+            if level <= max_levels:
+                world_data = []
+                world = reset_level(level)
+                game_over = 0
+            else:
+                if restart_button.draw():
+                    level = 1
+                    world_data = []
+                    world = reset_level(level)
+                    game_over = 0
 
     for event in pygame.event.get():
         if event.type == KEYDOWN and event.key == K_ESCAPE:
