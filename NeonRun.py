@@ -370,7 +370,7 @@ pygame.display.flip()
 #Loop
 player = Player(100, screen_height - 335)
 pig_group = pygame.sprite.Group()
-cables_group = pygame.sprite.Groupe()
+cables_group = pygame.sprite.Group()
 world = World(world_data)
 restart_button = Button(screen_width // 2 - 175, screen_height // 2 + 250, restart)
 play_button = Button(screen_width // 2 - 200, screen_height // 2 + 100 , play)
