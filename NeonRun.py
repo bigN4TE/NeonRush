@@ -15,6 +15,10 @@ screen_height = 1080
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Neon Run')
 
+
+#font
+font_score = pygame.font.SysFont('OS X', 25)
+
 #tile size
 tile_size = 128
 img_size = (128, 128)
@@ -24,8 +28,12 @@ game_over = 0
 main_menu = True
 
 level = 0
-
 max_levels = 5
+
+score = 0
+
+#colors
+orange = (255, 165, 0)
 
 #background
 background = pygame.image.load('Assets/Backgrounds/Background 1.png')
@@ -76,6 +84,10 @@ def draw_grid():
     for line in range(0, 25):
         pygame.draw.line(screen, (255, 255, 255), (0, line * tile_size), (screen_width, line * tile_size))
         pygame.draw.line(screen, (255, 255, 255), (line * tile_size, 0), (line * tile_size, screen_height))
+
+def draw_text(text, font, text_col, x, y):
+    img = font.render(text, True, text_col)
+    screen.blit(img, (x, y))
 
 #level reset
 def reset_level(level):
@@ -291,6 +303,16 @@ class Cables(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+#note
+class Note(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        img = pygame.image.load('Assets/Items/Note 1.png')
+        self.image = pygame.transform.scale(img, (tile_size // 2, tile_size // 2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
 #exit
 class Exit(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -399,9 +421,13 @@ player = Player(100, screen_height - 335)
 pig_group = pygame.sprite.Group()
 cables_group = pygame.sprite.Group()
 exit_group = pygame.sprite.Group()
+note_group = pygame.sprite.Sprite()
 world = World(world_data)
 restart_button = Button(screen_width // 2 - 175, screen_height // 2 + 250, restart)
 play_button = Button(screen_width // 2 - 200, screen_height // 2 + 100 , play)
+
+score_note = Note(tile_size // 2, tile_size // 2)
+note_group.add(score_note)
 
 if path.exists(f'level{level}_data'):
     pickle_in = open(f'level{level}_data', 'rb')
@@ -426,9 +452,13 @@ while run:
 
         if game_over == 0:
             pig_group.update()
+            if pygame.sprite.spritecollide(player, note_group, True):
+                score += 1
+            draw_text('X' + str(score), font_score, orange, tile_size - 10, 10)
     
         pig_group.draw(screen)
         cables_group.draw(screen)
+        note_group.draw(screen)
         exit_group.draw(screen)
 
         game_over = player.update(game_over)
@@ -439,6 +469,7 @@ while run:
             if restart_button.draw():
                 player.reset(100, screen_height - 335)
                 game_over = 0
+                score = 0
 
         if game_over == 1:
             level += 1
@@ -452,6 +483,7 @@ while run:
                     world_data = []
                     world = reset_level(level)
                     game_over = 0
+                    score = 0
 
     for event in pygame.event.get():
         if event.type == KEYDOWN and event.key == K_ESCAPE:
