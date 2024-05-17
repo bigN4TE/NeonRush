@@ -1,6 +1,8 @@
 import pygame
 from pygame.locals import *
 import time
+import pickle
+from os import path
 
 pygame.init()
 
@@ -20,6 +22,10 @@ img_size = (128, 128)
 game_over = 0
 
 main_menu = True
+
+level = 0
+
+max_levels = 5
 
 #background
 background = pygame.image.load('Assets/Backgrounds/Background 1.png')
@@ -70,6 +76,17 @@ def draw_grid():
     for line in range(0, 25):
         pygame.draw.line(screen, (255, 255, 255), (0, line * tile_size), (screen_width, line * tile_size))
         pygame.draw.line(screen, (255, 255, 255), (line * tile_size, 0), (line * tile_size, screen_height))
+
+#level reset
+def reset_level(level):
+    player.reset(100, screen_height - 335)
+    pig_group.empty()
+    cables_group.empty()
+    if path.exists('level{level}_data'):
+        pickle_in = open(f'level{level}_data', 'rb')
+        world_data = pickle.load(pickle_in)
+    world = World(world_data)
+    return world
 
 #buttons
 class Button():
@@ -186,7 +203,7 @@ class Player():
                 self.rect.y -= 5
 
         screen.blit(self.image, self.rect)
-        pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)
+        """pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)"""
 
         return game_over
 
@@ -228,7 +245,7 @@ class Player():
         self.direction = 0
         self.in_air = True
 
-#Enemy1
+#enemy1
 class Enemy1(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -246,7 +263,7 @@ class Enemy1(pygame.sprite.Sprite):
             self.move_direction *= -1
             self.move_counter *= -1
 
-#Enemy2
+#enemy2
 class Enemy2(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -264,12 +281,22 @@ class Enemy2(pygame.sprite.Sprite):
             self.move_direction *= -1
             self.move_counter *= -1
 
-#Cables
+#cables
 class Cables(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         img = pygame.image.load('Assets/Tiles/Cable.png')
         self.image = pygame.transform.scale(img, (tile_size, tile_size // 2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+#exit
+class Exit(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        img = pygame.image.load('Assets/Tiles/Cymbals 1.png')
+        self.image = pygame.transform.scale(img, (tile_size, int(tile_size * 1.5)))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -287,7 +314,7 @@ class World():
         frame_img = pygame.image.load('Assets/Tiles/Floor 3.png')
         speaker_img = pygame.image.load('Assets/Tiles/Speaker.png')
         piano_img = pygame.image.load('Assets/Tiles/Piano.png')
-        drum_img = pygame.image.load('Assets/Items/Drum.png')
+        drum_img = pygame.image.load('Assets/Tiles/Drum.png')
         
         #tile value
         row_count = 0
@@ -354,15 +381,15 @@ class World():
 
 #tile placement
 world_data = [
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
 ]
 
 pygame.display.flip()
@@ -374,6 +401,11 @@ cables_group = pygame.sprite.Group()
 world = World(world_data)
 restart_button = Button(screen_width // 2 - 175, screen_height // 2 + 250, restart)
 play_button = Button(screen_width // 2 - 200, screen_height // 2 + 100 , play)
+
+if path.exists(f'level{level}_data'):
+    pickle_in = open(f'level{level}_data', 'rb')
+    world_data = pickle.load(pickle_in)
+world = World(world_data)
 
 run = True
 pygame.key.set_repeat(10,10)
