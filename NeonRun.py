@@ -172,8 +172,8 @@ class Player():
             if pygame.sprite.spritecollide(self, pig_group, False):
                 game_over = -1
             
-            """if pygame.sprite.spritecollide(self, cable_group, False):
-                game_over = -1"""
+            if pygame.sprite.spritecollide(self, cables_group, False):
+                game_over = -1
             
             #coordinates update
             self.rect.x += dx
@@ -265,14 +265,14 @@ class Enemy2(pygame.sprite.Sprite):
             self.move_counter *= -1
 
 #Cables
-"""class Cables(pygame.sprit.Sprite):
+class Cables(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        img = pygame.image.load('Assets/Tiles/.png')
+        img = pygame.image.load('Assets/Tiles/Cable.png')
         self.image = pygame.transform.scale(img, (tile_size, tile_size // 2))
         self.rect = self.image.get_rect()
         self.rect.x = x
-        self.rect.y = y"""
+        self.rect.y = y
 
 #jump pad
 
@@ -336,9 +336,9 @@ class World():
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
-                """if tile == 7:
+                if tile == 7:
                     cables = Cables(col_count * tile_size, row_count * tile_size + (tile_size // 2))
-                    cables_group.add(cables)"""
+                    cables_group.add(cables)
                 if tile == 8:
                     pig1 = Enemy1(col_count * tile, row_count * tile_size)
                     pig_group.add(pig1)
@@ -370,7 +370,7 @@ pygame.display.flip()
 #Loop
 player = Player(100, screen_height - 335)
 pig_group = pygame.sprite.Group()
-"""Cable_group = pygame.sprite.Groupe()"""
+cables_group = pygame.sprite.Groupe()
 world = World(world_data)
 restart_button = Button(screen_width // 2 - 175, screen_height // 2 + 250, restart)
 play_button = Button(screen_width // 2 - 200, screen_height // 2 + 100 , play)
@@ -395,7 +395,7 @@ while run:
             pig_group.update()
     
         pig_group.draw(screen)
-        """cables_group.draw(screen)"""
+        cables_group.draw(screen)
 
         game_over = player.update(game_over)
 
