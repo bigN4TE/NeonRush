@@ -17,11 +17,11 @@ pygame.display.set_caption('Neon Run')
 
 
 #font
-font_score = pygame.font.SysFont('OS X', 25)
+font_score = pygame.font.SysFont('OS X', 75)
 
 #tile size
 tile_size = 128
-img_size = (128, 128)
+"""img_size = (128, 128)"""
 
 game_over = 0
 
@@ -94,7 +94,7 @@ def reset_level(level):
     player.reset(100, screen_height - 335)
     pig_group.empty()
     cables_group.empty()
-    if path.exists('level{level}_data'):
+    if path.exists(f'level{level}_data'):
         pickle_in = open(f'level{level}_data', 'rb')
         world_data = pickle.load(pickle_in)
     world = World(world_data)
@@ -133,7 +133,7 @@ class Player():
 
         if game_over == 0:
 
-    #controles
+            #controles
             key = pygame.key.get_pressed()
             if key[pygame.K_UP] and self.jumped == False:
                 self.vel_y = -20
@@ -303,22 +303,22 @@ class Cables(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-#note
-class Note(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        img = pygame.image.load('Assets/Items/Note 1.png')
-        self.image = pygame.transform.scale(img, (tile_size // 2, tile_size // 2))
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-
 #exit
 class Exit(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         img = pygame.image.load('Assets/Tiles/Cymbals 1.png')
         self.image = pygame.transform.scale(img, (tile_size, int(tile_size * 1.5)))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+#notes
+class Notes(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        img = pygame.image.load('Assets/Items/Note 1.png')
+        self.image = pygame.transform.scale(img, (tile_size // 2, tile_size // 2))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -421,13 +421,13 @@ player = Player(100, screen_height - 335)
 pig_group = pygame.sprite.Group()
 cables_group = pygame.sprite.Group()
 exit_group = pygame.sprite.Group()
-note_group = pygame.sprite.Sprite()
+notes_group = pygame.sprite.Group()
 world = World(world_data)
 restart_button = Button(screen_width // 2 - 175, screen_height // 2 + 250, restart)
 play_button = Button(screen_width // 2 - 200, screen_height // 2 + 100 , play)
 
-score_note = Note(tile_size // 2, tile_size // 2)
-note_group.add(score_note)
+score_note = Notes(tile_size * 7 + 10, tile_size + 32)
+notes_group.add(score_note)
 
 if path.exists(f'level{level}_data'):
     pickle_in = open(f'level{level}_data', 'rb')
@@ -452,13 +452,16 @@ while run:
 
         if game_over == 0:
             pig_group.update()
-            if pygame.sprite.spritecollide(player, note_group, True):
+            cables_group.update()
+            exit_group.update()
+            notes_group.update()
+            if pygame.sprite.spritecollide(player, notes_group, True):
                 score += 1
-            draw_text('X' + str(score), font_score, orange, tile_size - 10, 10)
+            draw_text(str(score), font_score, orange, tile_size * 7 + 64, 168)
     
         pig_group.draw(screen)
         cables_group.draw(screen)
-        note_group.draw(screen)
+        notes_group.draw(screen)
         exit_group.draw(screen)
 
         game_over = player.update(game_over)
