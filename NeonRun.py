@@ -1,9 +1,12 @@
 import pygame
 from pygame.locals import *
+from pygame import mixer
 import time
 import pickle
 from os import path
 
+pygame.mixer.pre_init(44100, -16, 2, 512)
+mixer.init()
 pygame.init()
 
 clock = pygame.time.Clock()
@@ -21,7 +24,7 @@ font_score = pygame.font.SysFont('OS X', 75)
 
 #tile size
 tile_size = 128
-"""img_size = (128, 128)"""
+img_size = (128, 128)
 
 game_over = 0
 
