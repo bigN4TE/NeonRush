@@ -121,12 +121,10 @@ class Player():
 
             #controles
             key = pygame.key.get_pressed()
-            if key[pygame.K_UP] and self.jumped == False:
+            if key[pygame.K_UP] and not self.in_air:
                 """jump_fx.play()"""
                 self.vel_y = -20
-                self.jumped = True
-            if key[pygame.K_UP] == False:
-                self.jumped = False
+                self.in_air = True
             if key[pygame.K_LEFT]:
                 """run_fx.play()"""
                 dx -= 20
@@ -142,10 +140,12 @@ class Player():
             if key[pygame.K_LEFT] == False and key[pygame.K_RIGHT] == False:
                 self.counter = 0
                 self.direction = 0
+                """if self.direction == 0:
+                    self.image = self.image_front[self.index]
                 if self.direction == 1:
                     self.image = self.image_right[self.index]
                 if self.direction == -1:
-                    self.image = self.image_left[self.index]
+                    self.image = self.image_left[self.index]"""
             """elif:
                 if key[pygame.K_UP] == False:
                     self.counter = 0
@@ -160,12 +160,10 @@ class Player():
                 self.index += 1
                 if self.index >= len(self.image_right):
                     self.index = 0
-                if self.direction == 1:
-                    self.image = self.image_right[self.index]
-                if self.direction == -1:
-                    self.image = self.image_left[self.index]
-                """if self.direction == 0:
-                    self.image = self.image_front[self.index]"""
+                if self.index >= len(self.image_still):
+                    self.index = 0
+                if self.index >=  len(self.image_jump_right):
+                    self.index = 0
 
             #gravity
             self.vel_y += 1
@@ -201,9 +199,15 @@ class Player():
 
         elif game_over == -1:
             self.image = self.dead_image
-            
             if self.rect.y > -100:
                 self.rect.y -= 5
+
+        if self.direction == 1:
+            self.image = self.image_right[self.index]
+        elif self.direction == -1:
+            self.image = self.image_left[self.index]
+        else:
+            self.image = self.image_still[self.index]
 
         screen.blit(self.image, self.rect)
         """pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)"""
@@ -215,7 +219,7 @@ class Player():
         self.image_left = []
         self.image_jump_right = []
         self.image_jump_left = []
-        self.image_front = []
+        self.image_still = []
         self.index = 0
         self.counter = 0
         for num in range(1, 9):
@@ -225,18 +229,18 @@ class Player():
             self.image_right.append(img_right)
             self.image_left.append(img_left)
         self.image = self.image_right[self.index]
-        """for num in range(1, 6):
-            img_front = pygame.image.load(f'Assets/Character/Still {num}.png')
-            img_front = pygame.transform.scale(img_front, (128, 128))
-            self.image_front.append(img_front)
-        self.image = self.image_front[self.index] """
-        """for num in range (1, 10):
+        for num in range(1, 6):
+            img_still = pygame.image.load(f'Assets/Character/Still {num}.png')
+            img_still = pygame.transform.scale(img_still, (128, 128))
+            self.image_still.append(img_still)
+        self.image = self.image_still[self.index]
+        for num in range (1, 10):
             img_jumpr = pygame.image.load(f"Assets/Character/Jump {num}.png")
-            img_jumpr = pygame.transform.scale(img_right, (192, 192))
-            img_jumpl = pygame.transform.flip(img_right, True, False)
+            img_jumpr = pygame.transform.scale(img_jumpr, (128, 128))
+            img_jumpl = pygame.transform.flip(img_jumpr, True, False)
             self.image_jump_right.append(img_jumpr)
             self.image_jump_left.append(img_jumpl)
-        self.image = self.image_jump_right[self.index]"""
+        self.image = self.image_jump_right[self.index]
         self.dead_image = pygame.image.load('Assets/Character/Death.png')
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -244,45 +248,62 @@ class Player():
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.vel_y = 0
-        self.jumped = False
         self.direction = 0
         self.in_air = True
 
-#enemy1
+# enemy1
 class Enemy1(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('Assets/Pig1/Pig1 Still 1.png')
+        self.images = [pygame.image.load(f'Assets/Pig1/Pig1 Walk {i}.png') for i in range(1, 4)]
+        self.index = 0
+        self.image = self.images[self.index]
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.move_direction = 1
         self.move_counter = 0
+        self.animation_speed = 5
 
     def update(self):
-        self.rect.x += self.move_direction
         self.move_counter += 1
+        if self.move_counter % self.animation_speed == 0:
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
+
+        self.rect.x += self.move_direction
         if abs(self.move_counter) > 128:
             self.move_direction *= -1
             self.move_counter *= -1
+            for i in range(len(self.images)):
+                self.images[i] = pygame.transform.flip(self.images[i], True, False)
 
 #enemy2
 class Enemy2(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('Assets/Pig2/Pig2 Still 1.png')
+        self.images = [pygame.image.load(f'Assets/Pig2/Pig2 Walk {i}.png') for i in range(1, 4)]
+        self.index = 0
+        self.image = self.images[self.index]
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.move_direction = 1
         self.move_counter = 0
+        self.animation_speed = 5
 
     def update(self):
-        self.rect.x += self.move_direction
         self.move_counter += 1
+        if self.move_counter % self.animation_speed == 0:
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
+
+        self.rect.x += self.move_direction
         if abs(self.move_counter) > 128:
             self.move_direction *= -1
             self.move_counter *= -1
+            for i in range(len(self.images)):
+                self.images[i] = pygame.transform.flip(self.images[i], True, False)
 
 #cables
 class Cables(pygame.sprite.Sprite):
@@ -298,8 +319,8 @@ class Cables(pygame.sprite.Sprite):
 class Exit(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        img = pygame.image.load('Assets/Tiles/Cymbals 1.png')
-        self.image = pygame.transform.scale(img, (tile_size, int(tile_size * 1.5)))
+        img = pygame.image.load('Assets/Items/Guitar.png')
+        self.image = pygame.transform.scale(img, (tile_size, tile_size))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -388,6 +409,10 @@ class World():
                 if tile == 10:
                     note = Notes(col_count * tile_size + (tile_size // 2), row_count * tile_size + (tile_size // 2))
                     notes_group.add(note)
+                if tile == 11:
+                    exit = Exit(col_count * tile_size, row_count * tile_size)
+                    exit_group.add(exit)
+
                 col_count += 1
             row_count += 1
 
@@ -434,6 +459,10 @@ while run:
 
     clock.tick(fps)
 
+    for event in pygame.event.get():
+        if event.type == KEYDOWN and event.key == K_ESCAPE:
+            run = False
+
     screen.blit(background, (0, 0))
     if main_menu == True:
         screen.blit(start, (0, 0))
@@ -460,12 +489,12 @@ while run:
         exit_group.draw(screen)
 
         game_over = player.update(game_over)
-
+     
         #if player dead
         if game_over == -1:
             screen.blit(gameover_menu, (0, 0))
             if restart_button.draw():
-                player.reset(100, screen_height - 335)
+                player.reset(256, screen_height - 335)
                 game_over = 0
                 score = 0
 
@@ -482,10 +511,6 @@ while run:
                     world = reset_level(level)
                     game_over = 0
                     score = 0
-
-    for event in pygame.event.get():
-        if event.type == KEYDOWN and event.key == K_ESCAPE:
-            run = False
 
     pygame.display.update()
 
