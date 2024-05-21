@@ -19,6 +19,19 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Neon Run')
 
 
+"""pygame.mixer.music.load('Assets/Music/.mp4')
+pygame.mixer.music.play(-1, 0.0, 5000)
+notes_fx = pygame.mixer.sound('Assets/Audio/.mp4')
+notes_fx.set_volume(0.5)
+run_fx = pygame.mixer.sound('Assets/Audio/.mp4')
+run_fx.set_volume(0.5)
+jump_fx = pygame.mixer.sound('Assets/Audio/.mp4')
+jump_fx.set_volume(0.5)
+game_over_fx = pygame.mixer.sound('Assets/Audio/.mp4')
+game_over_fx.set_volume(0.5)
+button_fx = pygame.mixer.sound('Assets/Audio/.mp4')
+button_fx.set_volume(0.5)"""
+
 #font
 font_score = pygame.font.SysFont('OS X', 75)
 
@@ -31,7 +44,7 @@ game_over = 0
 main_menu = True
 
 level = 0
-max_levels = 5
+max_levels = 1
 
 score = 0
 
@@ -39,7 +52,7 @@ score = 0
 orange = (255, 165, 0)
 
 #background
-background = pygame.image.load('Assets/Backgrounds/Background 1.png')
+background = pygame.image.load('Assets/Backgrounds/Full Background.png')
 
 #restart
 gameover_menu = pygame.image.load('Assets/Menus/Game Over.png')
@@ -50,37 +63,6 @@ restart = pygame.transform.scale(restart, (384, 192))
 start = pygame.image.load('Assets/Menus/Start Menu.png')
 play = pygame.image.load('Assets/Buttons/Play.png')
 play = pygame.transform.scale(play, (384, 192))
-
-"""bg_image1 = 'Assets/Backgrounds/Background 0.png'
-bg_image2 = 'Assets/Backgrounds/Background 1.png'
-bg_image3 = 'Assets/Backgrounds/Background 2.png'
-bg_image4 = 'Assets/Backgrounds/Background 3.png'
-bg_image5 = 'Assets/Backgrounds/Background 4.png'
-
-class AnimatedBackground(pygame.sprite.Sprite):
-    def __init__(self, x, y, animations, frame_delta=3000):
-        pygame.sprite.Sprite.__init__(self)
-        self.animation_frames = [pygame.image.load(f'Assets/Backgrounds/Background 0.png').convert_alpha() for filename in animations]
-        self.image = self.animation_frames[0]
-
-        self.rect = self.image.get_rect()        
-        self.rect.x = x
-        self.rect.y = y
-
-        self.current_frame = 0
-        self.last_update = 0
-        self.frame_delta = frame_delta
-
-    def animate(self):
-        now = pygame.time.get_ticks()
-        if now - self.last_update > self.frame_delta:
-            self.last_update = now
-            self.current_frame = (self.current_frame + 1) % len(self.animation_frames)
-            self.image = self.animation_frames[self.current_frame]
-    
-    def update(self):
-        self.animate()
-        self.my_background = AnimatedBackground(0, 0, [bg_image1, bg_image2, bg_image3, bg_image4, bg_image1], frame_delta = 3000)"""
 
 #tile grid
 def draw_grid():
@@ -118,6 +100,7 @@ class Button():
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 action = True
+                """button_fx.play()"""
                 self.clicked = True
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
@@ -139,15 +122,18 @@ class Player():
             #controles
             key = pygame.key.get_pressed()
             if key[pygame.K_UP] and self.jumped == False:
+                """jump_fx.play()"""
                 self.vel_y = -20
                 self.jumped = True
             if key[pygame.K_UP] == False:
                 self.jumped = False
             if key[pygame.K_LEFT]:
+                """run_fx.play()"""
                 dx -= 20
                 self.counter += 1
                 self.direction = -1
             if key[pygame.K_RIGHT]:
+                """run_fx.play()"""
                 dx += 20
                 self.counter += 1
                 self.direction = 1
@@ -203,9 +189,11 @@ class Player():
 
             if pygame.sprite.spritecollide(self, pig_group, False):
                 game_over = -1
+                """game_over_fx.play()"""
             
             if pygame.sprite.spritecollide(self, cables_group, False):
                 game_over = -1
+                """game_over_fx.play()"""
             
             #coordinates update
             self.rect.x += dx
@@ -397,6 +385,9 @@ class World():
                 if tile == 9:
                     pig2 = Enemy2(col_count * tile, row_count * tile_size)
                     pig_group.add(pig2)
+                if tile == 10:
+                    note = Notes(col_count * tile_size + (tile_size // 2), row_count * tile_size + (tile_size // 2))
+                    notes_group.add(note)
                 col_count += 1
             row_count += 1
 
@@ -406,21 +397,21 @@ class World():
 
 #tile placement
 world_data = [
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
 ]
 
 pygame.display.flip()
 
 #Loop
-player = Player(100, screen_height - 335)
+player = Player(256, screen_height - 335)
 pig_group = pygame.sprite.Group()
 cables_group = pygame.sprite.Group()
 exit_group = pygame.sprite.Group()
@@ -460,6 +451,7 @@ while run:
             notes_group.update()
             if pygame.sprite.spritecollide(player, notes_group, True):
                 score += 1
+                """notes_fx.play()"""
             draw_text(str(score), font_score, orange, tile_size * 7 + 64, 168)
     
         pig_group.draw(screen)
