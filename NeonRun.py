@@ -71,6 +71,11 @@ next = pygame.image.load('Assets/misc/Note 2.png')
 dialogue1 = pygame.image.load('Assets/Dialogue/Dialogue 1.png')
 dialogue2 = pygame.image.load('Assets/Dialogue/Dialogue 2.png')
 
+#win menu
+win1 = pygame.image.load('Assets/Menus/Win B 1.png')
+win2 = pygame.image.load('Assets/Menus/Win B 2.png')
+win3 = pygame.image.load('Assets/Menus/Win B 3.png')
+
 #tile grid
 def draw_grid():
     for line in range(0, 25):
@@ -199,6 +204,9 @@ class Player():
             if pygame.sprite.spritecollide(self, cables_group, False):
                 game_over = -1
                 """game_over_fx.play()"""
+
+            if pygame.sprite.spritecollide(self, exit_group, False):
+                game_over = 1
             
             #coordinates update
             self.rect.x += dx
@@ -409,10 +417,10 @@ class World():
                     cables = Cables(col_count * tile_size, row_count * tile_size + (tile_size // 2))
                     cables_group.add(cables)
                 if tile == 8:
-                    pig1 = Enemy1(col_count * tile, row_count * tile_size)
+                    pig1 = Enemy1(col_count * tile_size, row_count * tile_size)
                     pig_group.add(pig1)
                 if tile == 9:
-                    pig2 = Enemy2(col_count * tile, row_count * tile_size)
+                    pig2 = Enemy2(col_count * tile_size, row_count * tile_size)
                     pig_group.add(pig2)
                 if tile == 10:
                     note = Notes(col_count * tile_size + (tile_size // 2), row_count * tile_size + (tile_size // 2))
@@ -436,12 +444,10 @@ world_data = [
 [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
 [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
 [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
-[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 4],
+[4, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 4],
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
 ]
-
-pygame.display.flip()
 
 #Loop
 player = Player(256, screen_height - 335)
@@ -449,7 +455,6 @@ pig_group = pygame.sprite.Group()
 cables_group = pygame.sprite.Group()
 exit_group = pygame.sprite.Group()
 notes_group = pygame.sprite.Group()
-world = World(world_data)
 restart_button = Button(screen_width // 2 - 175, screen_height // 2 + 250, restart)
 play_button = Button(screen_width // 2 - 200, screen_height // 2 + 100 , play)
 next_button1 = Button(screen_width // 2 + 700, screen_height // 2 + 100, next)
@@ -511,7 +516,7 @@ while run:
         exit_group.draw(screen)
 
         game_over = player.update(game_over)
-     
+
         #if player dead
         if game_over == -1:
             screen.blit(gameover_menu, (0, 0))
@@ -521,19 +526,31 @@ while run:
                 score = 0
 
         if game_over == 1:
-            level += 1
-            if level <= max_levels:
-                world_data = []
-                world = reset_level(level)
-                game_over = 0
-            else:
+            if score >= 11:
+                screen.blit(win3, (0, 0))
                 if restart_button.draw():
                     level = 1
                     world_data = []
                     world = reset_level(level)
                     game_over = 0
                     score = 0
-
+            elif score >= 6 and score <= 10:
+                screen.blit(win2, (0, 0))
+                if restart_button.draw():
+                    level = 1
+                    world_data = []
+                    world = reset_level(level)
+                    game_over = 0
+                    score = 0
+            elif score <= 5:
+                screen.blit(win1, (0, 0))
+                if restart_button.draw():
+                    level = 1
+                    world_data = []
+                    world = reset_level(level)
+                    game_over = 0
+                    score = 0
+            
     pygame.display.update()
 
 pygame.quit()
