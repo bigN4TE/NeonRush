@@ -42,6 +42,8 @@ img_size = (128, 128)
 game_over = 0
 
 main_menu = True
+dialogue_menu1 = False
+dialogue_menu2 = False
 
 level = 0
 max_levels = 1
@@ -63,6 +65,11 @@ restart = pygame.transform.scale(restart, (384, 192))
 start = pygame.image.load('Assets/Menus/Start Menu.png')
 play = pygame.image.load('Assets/Buttons/Play.png')
 play = pygame.transform.scale(play, (384, 192))
+next = pygame.image.load('Assets/misc/Note 2.png')
+
+#dialogues
+dialogue1 = pygame.image.load('Assets/Dialogue/Dialogue 1.png')
+dialogue2 = pygame.image.load('Assets/Dialogue/Dialogue 2.png')
 
 #tile grid
 def draw_grid():
@@ -337,6 +344,7 @@ class Notes(pygame.sprite.Sprite):
 
 #jump pad
 
+
 #tile system
 class World():
     def __init__(self, data):
@@ -428,7 +436,7 @@ world_data = [
 [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
 [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
 [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
-[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 4],
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
 ]
@@ -444,6 +452,8 @@ notes_group = pygame.sprite.Group()
 world = World(world_data)
 restart_button = Button(screen_width // 2 - 175, screen_height // 2 + 250, restart)
 play_button = Button(screen_width // 2 - 200, screen_height // 2 + 100 , play)
+next_button1 = Button(screen_width // 2 + 700, screen_height // 2 + 100, next)
+next_button2 = Button(screen_width // 2 + 700, screen_height // 2 + 100, next)
 
 score_note = Notes(tile_size * 7 + 10, tile_size + 32)
 notes_group.add(score_note)
@@ -468,10 +478,22 @@ while run:
         screen.blit(start, (0, 0))
         if play_button.draw():
             main_menu = False
+            dialogue_menu1 = True
+    
     else:
-        world.draw()
+        if dialogue_menu1 == True:
+            screen.blit(dialogue1, (0, 0))
+            if next_button1.draw():
+                dialogue_menu1 = False
+                dialogue_menu2 = True
 
-        draw_grid()
+        elif dialogue_menu2 == True:
+            screen.blit(dialogue2, (0, 0))
+            if next_button2.draw():
+                dialogue_menu2 = False
+        
+        world.draw()
+        """draw_grid()"""
 
         if game_over == 0:
             pig_group.update()
